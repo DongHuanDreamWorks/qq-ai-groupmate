@@ -1,0 +1,78 @@
+name: qq-ai-groupmate
+
+services:
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    container_name: qq-ai-napcat
+    restart: unless-stopped
+    environment:
+      - NAPCAT_UID=1000
+      - NAPCAT_GID=1000
+      - MODE=astrbot
+      - ACCOUNT=${QQ_ACCOUNT}
+      - NAPCAT_QUICK_ACCOUNT=${QQ_ACCOUNT}
+      - WEBUI_TOKEN=${NAPCAT_WEBUI_TOKEN}
+      - TZ=${TZ:-Asia/Shanghai}
+    ports:
+      - "127.0.0.1:6099:6099"
+    volumes:
+      - ./data/napcat/config:/app/napcat/config
+      - ./data/napcat/plugins:/app/napcat/plugins
+      - ./data/napcat/cache:/app/napcat/cache
+      - ./data/napcat/qq:/app/.config/QQ
+    networks: [botnet]
+    mem_limit: 1400m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  astrbot:
+    image: soulter/astrbot:latest
+    container_name: qq-ai-astrbot
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ:-Asia/Shanghai}
+      - BRAIN_URL=http://console:8088
+      - BRAIN_TOKEN=${BRAIN_TOKEN}
+    ports:
+      - "127.0.0.1:6185:6185"
+    volumes:
+      - ./data/astrbot:/AstrBot/data
+      - ./astrbot-plugin/qqbrain:/AstrBot/data/plugins/qqbrain
+    networks: [botnet]
+    depends_on: [console]
+    mem_limit: 900m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  console:
+    build:
+      context: .
+      dockerfile: console/Dockerfile
+    container_name: qq-ai-console
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ:-Asia/Shanghai}
+      - BRAIN_DB=/data/brain.db
+      - BRAIN_TOKEN=${BRAIN_TOKEN}
+      - CONSOLE_PASSWORD=${CONSOLE_PASSWORD:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - NAPCAT_WS=ws://napcat:3001
+      - QQCMD_DIR=/qqcmd
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./data/console:/data
+      - ./data/napcat/plugins:/qqcmd
+      - ./data/napcat/cache:/napcat-cache:ro
+      - ./run:/run/qqbot
+    networks: [botnet]
+    mem_limit: 500m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+networks:
+  botnet:
+    driver: bridge

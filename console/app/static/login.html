@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>登录 · QQ 群友控制台</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card">
+    <h1>QQ 群友控制台</h1>
+    <p>输入管理密码（首次在 <code>data/console/initial_password.txt</code>）</p>
+    <div class="field">
+      <label>密码</label>
+      <input type="password" id="pw" autofocus />
+    </div>
+    <button class="btn primary" id="loginBtn" style="width:100%">登录</button>
+    <div class="small muted" id="err" style="margin-top:10px"></div>
+  </div>
+</div>
+<script>
+  async function doLogin() {
+    const pw = document.getElementById('pw').value;
+    const err = document.getElementById('err');
+    err.textContent = '';
+    const res = await fetch('/api/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({password: pw})
+    });
+    if (res.ok) { location.href = '/app'; }
+    else { const d = await res.json().catch(() => ({})); err.textContent = d.error || '登录失败'; }
+  }
+  document.getElementById('loginBtn').onclick = doLogin;
+  document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>

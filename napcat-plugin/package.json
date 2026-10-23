@@ -1,0 +1,8 @@
+{
+  "name": "napcat-plugin-qce",
+  "plugin": "QQ AI 桥接",
+  "version": "0.1.0",
+  "main": "index.mjs",
+  "description": "Qzone / profile / avatar / friend-request bridge for the console",
+  "author": "QQ AI Groupmate"
+}

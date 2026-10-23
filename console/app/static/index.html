@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QQ 群友控制台</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">Q</div><b>群友控制台</b></div>
+    <button class="nav-btn active" data-view="overview"><span class="ico">◉</span>概览</button>
+    <button class="nav-btn" data-view="chat"><span class="ico">◈</span>对话调试</button>
+    <button class="nav-btn" data-view="memory"><span class="ico">▤</span>长期记忆</button>
+    <button class="nav-btn" data-view="context"><span class="ico">≡</span>上下文</button>
+    <button class="nav-btn" data-view="persona"><span class="ico">✎</span>人设</button>
+    <button class="nav-btn" data-view="trigger"><span class="ico">⚡</span>触发策略</button>
+    <button class="nav-btn" data-view="proactive"><span class="ico">☀</span>主动发言</button>
+    <button class="nav-btn" data-view="self"><span class="ico">◎</span>自运营</button>
+    <button class="nav-btn" data-view="tools"><span class="ico">✧</span>外部 AI</button>
+    <button class="nav-btn" data-view="emoji"><span class="ico">☺</span>表情</button>
+    <button class="nav-btn" data-view="friend"><span class="ico">✚</span>好友/入群</button>
+    <button class="nav-btn" data-view="model"><span class="ico">✦</span>模型</button>
+    <button class="nav-btn" data-view="logs"><span class="ico">▦</span>日志</button>
+    <button class="nav-btn" data-view="settings"><span class="ico">⚙</span>设置</button>
+    <div class="bottom">
+      <span class="dot" id="statusDot"></span><span id="statusText">连接中…</span>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2 id="pageTitle">概览</h2>
+        <div class="sub" id="pageSub"></div>
+      </div>
+      <div class="row">
+        <button class="btn sm" id="btnLogout">退出</button>
+      </div>
+    </div>
+    <div class="alert-bar hidden" id="alertBar"></div>
+    <section id="view"></section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
